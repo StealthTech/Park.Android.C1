@@ -25,6 +25,10 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
         return selectedPosArray;
     }
 
+    public void setSelectedPosArray(ArrayList<Integer> selectedPosArray) {
+        this.selectedPosArray = selectedPosArray;
+    }
+
     public NumbersAdapter(Context context, String[] DataSet) {
         mDataSet = DataSet;
         mContext = context;

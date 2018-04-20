@@ -67,9 +67,27 @@ public class GridLayoutFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (getActivity() instanceof ActivityOpener) {
-                    ((ActivityOpener) getActivity()).openDataFragment(((NumbersAdapter) mAdapter).getSelectedPosArray());
+                    ((ActivityOpener) getActivity()).openDataFragment(
+                            ((NumbersAdapter) mAdapter).getSelectedPosArray());
                 }
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putIntegerArrayList("position-array",
+                ((NumbersAdapter) mAdapter).getSelectedPosArray());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            ((NumbersAdapter) mAdapter).setSelectedPosArray(
+                    savedInstanceState.getIntegerArrayList("position-array"));
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }
