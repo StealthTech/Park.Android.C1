@@ -14,18 +14,20 @@ import java.util.ArrayList;
 
 
 public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHolder> {
+    private static final int COLOR_SELECTED = Color.rgb(240, 240, 240);
+    private static final int COLOR_DEFAULT = Color.TRANSPARENT;
+
     private String[] mDataSet;
     private Context mContext;
-    private OnClickListener listener;
     private ArrayList<Integer> selectedPosArray = new ArrayList<>();
-    private ArrayList<String> selectedTextArray = new ArrayList<>();
 
-    public NumbersAdapter(Context context, String[] DataSet, OnClickListener listener, ArrayList<Integer> selectedPosArray, ArrayList<String> selectedTextArray) {
+    public ArrayList<Integer> getSelectedPosArray() {
+        return selectedPosArray;
+    }
+
+    public NumbersAdapter(Context context, String[] DataSet) {
         mDataSet = DataSet;
         mContext = context;
-        this.listener = listener;
-        this.selectedPosArray = selectedPosArray;
-        this.selectedTextArray = selectedTextArray;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -51,18 +53,21 @@ public class NumbersAdapter extends RecyclerView.Adapter<NumbersAdapter.ViewHold
         holder.mTextView.setText(mDataSet[position]);
 
         if (selectedPosArray.contains(holder.getAdapterPosition())) {
-            holder.mTextView.setBackgroundColor(Color.rgb(240, 240, 240));
+            holder.mTextView.setBackgroundColor(COLOR_SELECTED);
+        } else {
+            holder.mTextView.setBackgroundColor(COLOR_DEFAULT);
         }
 
         holder.mLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedPosArray.contains(holder.getAdapterPosition())) {
-                    holder.mTextView.setBackgroundColor(Color.TRANSPARENT);
+                    holder.mTextView.setBackgroundColor(COLOR_DEFAULT);
+                    selectedPosArray.remove((Integer) holder.getAdapterPosition());
                 } else {
-                    holder.mTextView.setBackgroundColor(Color.rgb(240, 240, 240));
+                    holder.mTextView.setBackgroundColor(COLOR_SELECTED);
+                    selectedPosArray.add(holder.getAdapterPosition());
                 }
-                listener.onNumberClick(holder.getAdapterPosition(), mDataSet[holder.getAdapterPosition()]);
             }
         });
     }

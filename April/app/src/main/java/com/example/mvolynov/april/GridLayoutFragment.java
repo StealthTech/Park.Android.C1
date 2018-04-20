@@ -17,13 +17,13 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GridLayoutFragment extends Fragment implements OnClickListener {
+public class GridLayoutFragment extends Fragment {
+    private static final int COLUMN_COUNT_PORTRAIT = 3;
+    private static final int COLUMN_COUNT_LANDSCAPE = 5;
 
     private Context mContext;
     LinearLayout mGridLayout;
     private RecyclerView mRecyclerView;
-    private ArrayList<Integer> selectedPosList = new ArrayList<>();
-    private ArrayList<String> selectedTextList = new ArrayList<>();
 
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -55,46 +55,21 @@ public class GridLayoutFragment extends Fragment implements OnClickListener {
 
         int spanCount;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            spanCount = 5;
+            spanCount = COLUMN_COUNT_LANDSCAPE;
         } else {
-            spanCount = 3;
+            spanCount = COLUMN_COUNT_PORTRAIT;
         }
         mLayoutManager = new GridLayoutManager(mContext, spanCount);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new NumbersAdapter(mContext, values, this, selectedPosList, selectedTextList);
+        mAdapter = new NumbersAdapter(mContext, values);
         mRecyclerView.setAdapter(mAdapter);
         view.findViewById(R.id.done).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (getActivity() instanceof ActivityOpener) {
-                    ((ActivityOpener) getActivity()).openDataFragment(selectedPosList);
+                    ((ActivityOpener) getActivity()).openDataFragment(((NumbersAdapter) mAdapter).getSelectedPosArray());
                 }
             }
         });
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putIntegerArrayList("position-array", selectedPosList);
-        outState.putStringArrayList("value-array", selectedTextList);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            selectedPosList = savedInstanceState.getIntegerArrayList("position-array");
-            selectedTextList = savedInstanceState.getStringArrayList("value-array");
-        }
-    }
-
-    @Override
-    public void onNumberClick(Integer number, String str) {
-        if (selectedPosList.contains(number)) {
-            selectedPosList.remove(number);
-        } else {
-            selectedPosList.add(number);
-        }
     }
 }
