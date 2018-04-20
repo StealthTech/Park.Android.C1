@@ -13,11 +13,15 @@ public class MainActivity extends AppCompatActivity implements ActivityOpener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        GridLayoutFragment mGridLayoutFragment = new GridLayoutFragment();
+        GridLayoutFragment mGridLayoutFragment = (GridLayoutFragment) getSupportFragmentManager().findFragmentByTag(GridLayoutFragment.TAG);
 
         int frameLayoutId = R.id.frame_layout_container_general;
 
-        getSupportFragmentManager().beginTransaction().replace(frameLayoutId, mGridLayoutFragment).addToBackStack("grid").commit();
+        if (mGridLayoutFragment == null) {
+            mGridLayoutFragment = new GridLayoutFragment();
+            getSupportFragmentManager().beginTransaction().replace(frameLayoutId,
+                    mGridLayoutFragment, GridLayoutFragment.TAG).addToBackStack("grid").commit();
+        }
     }
 
     @Override

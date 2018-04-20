@@ -20,6 +20,7 @@ import java.util.List;
 public class GridLayoutFragment extends Fragment {
     private static final int COLUMN_COUNT_PORTRAIT = 3;
     private static final int COLUMN_COUNT_LANDSCAPE = 5;
+    public static final String TAG = "grid";
 
     private Context mContext;
     LinearLayout mGridLayout;
